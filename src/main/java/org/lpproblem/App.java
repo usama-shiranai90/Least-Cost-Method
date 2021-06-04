@@ -22,15 +22,15 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        stage.initStyle(StageStyle.DECORATED);
-        setPrimaryStage(stage);
-        setPrimaryScene(scene);
-        FXMLLoader root = new FXMLLoader(new File("src/main/java/org/lpproblem/View/MainScreen.fxml").toURI().toURL());
-        AnchorPane pane = root.load();
-        scene = new Scene(pane);
+        setUserAgentStylesheet(STYLESHEET_CASPIAN);
 
-        stage.setScene(scene);
+        FXMLLoader root = new FXMLLoader(new File("src/main/java/org/lpproblem/View/MainScreen.fxml").toURI().toURL());
+        stage.setTitle("Least Cost Method");
+        stage.setScene(new Scene(root.load(), 1000, 600));
+        stage.setMaxWidth(1000);
+        stage.setMaxHeight(600);
         stage.show();
+
     }
 
     public static void main(String[] args) {
@@ -52,4 +52,6 @@ public class App extends Application {
     public static Scene getMainScene() {
         return App.scene;
     }
+
+
 }
