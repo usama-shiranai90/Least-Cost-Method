@@ -1,2 +1,4 @@
 # Least-Cost-Method
  
+# VM Option :
+--module-path "C:\Program Files\Java\javafx-sdk-15.0.1\lib" --add-modules javafx.base,javafx.controls,javafx.fxml,javafx.graphics --add-opens javafx.graphics/javafx.css=ALL-UNNAMED --add-opens javafx.base/com.sun.javafx.runtime=ALL-UNNAMED --add-opens javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED --add-opens javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED --add-opens javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-opens javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED

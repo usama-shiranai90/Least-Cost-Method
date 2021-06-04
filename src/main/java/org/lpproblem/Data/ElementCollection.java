@@ -23,7 +23,7 @@ public class ElementCollection {
             else
                 cellsData.remove(cellsData.size() - 1);
         }
-        
+
     }
 
     public int getByIndex(int index) {

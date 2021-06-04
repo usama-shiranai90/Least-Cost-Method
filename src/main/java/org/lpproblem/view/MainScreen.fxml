@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="1000.0" stylesheets="@../../../view/styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lpproblem.Controller.MainScreenController" >
+<VBox prefHeight="600.0" prefWidth="1000.0" stylesheets="@../../../view/styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lpproblem.Controller.MainScreenController">
     <children>
         <MenuBar>
             <menus>
@@ -179,12 +179,12 @@
                                                                 <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                                                             </rowConstraints>
                                                             <children>
-                                                                <Label text="columns (Consumers)">
+                                                                <Label text="columns (Demands)">
                                                                     <padding>
                                                                         <Insets left="15.0" />
                                                                     </padding>
                                                                 </Label>
-                                                                <Label fx:id="demandLabel" text="3" GridPane.columnIndex="1" />
+                                                                <Label fx:id="demandLabel" text="4" GridPane.columnIndex="1" />
                                                             </children>
                                                             <GridPane.margin>
                                                                 <Insets top="5.0" />
