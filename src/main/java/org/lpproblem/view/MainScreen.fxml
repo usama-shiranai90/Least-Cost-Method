@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXSlider?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -7,7 +8,6 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableView?>
@@ -105,11 +105,6 @@
                                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                     <children>
-                                                        <Slider fx:id="supplySlider" GridPane.rowIndex="1">
-                                                            <padding>
-                                                                <Insets left="15.0" right="15.0" />
-                                                            </padding>
-                                                        </Slider>
                                                         <GridPane alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                                             <columnConstraints>
                                                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="181.0" minWidth="10.0" prefWidth="143.0" />
@@ -136,6 +131,11 @@
                                                                 <Insets top="5.0" />
                                                             </GridPane.margin>
                                                         </GridPane>
+                                          <JFXSlider fx:id="supplySlider" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="1" value="3.0" GridPane.rowIndex="1">
+                                             <GridPane.margin>
+                                                <Insets left="11.0" right="8.0" />
+                                             </GridPane.margin>
+                                          </JFXSlider>
                                                     </children>
                                                 </GridPane>
                                                 <GridPane GridPane.columnIndex="2">
@@ -150,7 +150,7 @@
                                                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                                                             <children>
                                                                 <!--                                                onAction="#calculate"-->
-                                                                <Button layoutX="486.0" layoutY="7.0" mnemonicParsing="false" text="Calculate" AnchorPane.rightAnchor="15.0" />
+                                                                <Button layoutX="486.0" layoutY="7.0" mnemonicParsing="false" onMouseClicked="#performCalculation" text="Calculate" AnchorPane.rightAnchor="15.0" />
                                                             </children>
                                                         </AnchorPane>
                                                           <Label prefHeight="72.0" prefWidth="258.0" style="-fx-text-alignment: center;" text="supply and demand cost" />
@@ -165,11 +165,6 @@
                                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                     <children>
-                                                        <Slider fx:id="demandSlider" GridPane.rowIndex="1">
-                                                            <padding>
-                                                                <Insets left="15.0" right="15.0" />
-                                                            </padding>
-                                                        </Slider>
                                                         <GridPane>
                                                             <columnConstraints>
                                                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="168.0" minWidth="10.0" prefWidth="168.0" />
@@ -190,6 +185,11 @@
                                                                 <Insets top="5.0" />
                                                             </GridPane.margin>
                                                         </GridPane>
+                                          <JFXSlider fx:id="demandSlider" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="1" prefHeight="14.0" prefWidth="186.0" value="4.0" GridPane.rowIndex="1">
+                                             <GridPane.margin>
+                                                <Insets left="11.0" right="8.0" />
+                                             </GridPane.margin>
+                                          </JFXSlider>
                                                     </children>
                                                 </GridPane>
                                             </children>
