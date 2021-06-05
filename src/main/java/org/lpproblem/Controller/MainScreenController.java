@@ -191,21 +191,6 @@ public class MainScreenController implements Initializable {
     }
 
 
-    private void updateArgumentToPass_CostTable(int rows, int columns) {
-        argumentToPass_CostTable = new ArrayList<>();
-   /*     for (int cols = 0; cols < columns; cols++) {
-            argumentToPass_CostTable.add(cols, new ArrayList<>());
-        }*/
-        for (int r = 0; r < rows; r++) {
-
-            argumentToPass_CostTable.add(r, new ArrayList<>());
-            for (int c = 0; c < columns; c++) {
-                argumentToPass_CostTable.get(r).add(c, 0);
-
-            }
-        }
-    }
-
     private void editRowsCostTable(int size) {
 
         while (costsObservableList.size() != size) {
@@ -221,9 +206,8 @@ public class MainScreenController implements Initializable {
             }
         }
         costTableView.refresh();
-        int sup = (int) (supplySlider.getValue());
-        int de = (int) (demandSlider.getValue());
-        updateArgumentToPass_CostTable(sup, de);
+
+        updateArgumentToPass_CostTable((int)supplySlider.getValue(), (int) demandSlider.getValue());
     }
 
     private void editColumnsCostTable(int size) {
@@ -233,9 +217,7 @@ public class MainScreenController implements Initializable {
         }
         costTableView.refresh();
 
-        int sup = (int) (supplySlider.getValue());
-        int de = (int) (demandSlider.getValue());
-        updateArgumentToPass_CostTable(sup, de);
+        updateArgumentToPass_CostTable((int)supplySlider.getValue(), (int) demandSlider.getValue());
     }
 
     private void configureColumn(TableColumn column, String tableType) {
@@ -288,10 +270,9 @@ public class MainScreenController implements Initializable {
                                 column.setOnEditCommit();*/
             column.setOnEditCommit(cellEditEvent -> {
                 cellEditEvent.getRowValue().setByIndex(columnIndex, Integer.parseInt(cellEditEvent.getNewValue()));
-                System.out.println("cellEditEvent.getTablePosition().getRow() = " + cellEditEvent.getTablePosition().getRow());
+/*                System.out.println("cellEditEvent.getTablePosition().getRow() = " + cellEditEvent.getTablePosition().getRow());
                 System.out.println("cellEditEvent.getTablePosition().getColumn() = " + cellEditEvent.getTablePosition().getColumn());
-                System.out.println("cellEditEvent.getNewValue() = " + cellEditEvent.getNewValue());
-
+                System.out.println("cellEditEvent.getNewValue() = " + cellEditEvent.getNewValue());*/
                 argumentToPass_CostTable.get(cellEditEvent.getTablePosition().getRow())
                         .set(cellEditEvent.getTablePosition().getColumn(), Integer.parseInt(cellEditEvent.getNewValue()));
 
@@ -324,6 +305,20 @@ public class MainScreenController implements Initializable {
 
     }
 
+    private void updateArgumentToPass_CostTable(int supply_row, int demand_column) {
+/*        argumentToPass_CostTable = new ArrayList<>();
+
+        for (int r = 0; r < supply_row; r++) {
+            argumentToPass_CostTable.add(r, new ArrayList<>());
+            for (int c = 0; c < demand_column; c++) {
+                argumentToPass_CostTable.get(r).add(c, 0);
+
+            }
+        }*/
+
+        
+
+    }
 
     public void initalizeArrayList() {
         argumentToPass_Supplies = new ArrayList<>();
