@@ -78,17 +78,17 @@
                                                 <RowConstraints maxHeight="457.0" minHeight="10.0" prefHeight="457.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                             <children>
-                                                <TableView fx:id="demandTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                <TableView fx:id="demandTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                                     <GridPane.margin>
                                                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                                     </GridPane.margin>
                                                 </TableView>
-                                                <TableView fx:id="suppliersTable" prefHeight="91.0" prefWidth="382.0" GridPane.rowIndex="1">
+                                                <TableView fx:id="suppliersTableView" prefHeight="91.0" prefWidth="382.0" GridPane.rowIndex="1">
                                                     <GridPane.margin>
                                                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                                     </GridPane.margin>
                                                 </TableView>
-                                                <TableView fx:id="costTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                <TableView fx:id="costTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                                     <placeholder>
                                                         <Label text="" />
                                                     </placeholder>
