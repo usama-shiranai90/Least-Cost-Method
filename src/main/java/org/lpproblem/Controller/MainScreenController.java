@@ -16,6 +16,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import org.lpproblem.Data.Cell;
 import org.lpproblem.Data.ElementCollection;
+import org.lpproblem.Data.LCM;
 
 import java.net.URL;
 import java.util.*;
@@ -389,13 +390,16 @@ public class MainScreenController implements Initializable {
 
     @FXML
     void performCalculation(MouseEvent event) {
-        System.out.println("argumentToPass_Supplies = " + argumentToPass_Supplies.toString());
+/*        System.out.println("argumentToPass_Supplies = " + argumentToPass_Supplies.toString());
         System.out.println("argumentToPass_demands = " + argumentToPass_demands.toString());
 
         System.out.println("Testing Cost Table :");
         for (ArrayList<Integer> a : argumentToPass_CostTable) {
             System.out.println(a);
-        }
+        }*/
+
+
+     new LCM(argumentToPass_Supplies , argumentToPass_demands , argumentToPass_CostTable);
 
     }
 }
