@@ -229,13 +229,31 @@ public class MainScreenController implements Initializable {
         column.setCellFactory(TextFieldTableCell.forTableColumn());
         column.setOnEditCommit(
                 (EventHandler<TableColumn.CellEditEvent<Cell, String>>) editEvent -> {
+                    int oldValue ;
+                    System.out.println("editEvent.getNewValue() = " + editEvent.getNewValue());
+                    if (editEvent.getNewValue().equalsIgnoreCase("Enter Value")){
+                        oldValue = 0 ;
+                        System.out.println("fuck = " );
+                    }
+                     else{
+                        System.out.println("lover");
+                        oldValue = Integer.parseInt(editEvent.getOldValue());
+                    }
+
+
+
                     (editEvent.getTableView().getItems().get(editEvent.getTablePosition().getRow())).setValue(viewHelp(editEvent.getNewValue()));
-                    
-                    System.out.println("getRow() value = " + editEvent.getTableView().getItems().get(editEvent.getTablePosition().getRow()).getValue());
+
+                    int newValue = editEvent.getTableView().getItems().get(editEvent.getTablePosition().getRow()).getValue();
 
                     if (tableType.equalsIgnoreCase("supply")) {
 
-                        if (argumentToPass_Supplies.size() < (int) supplySlider.getValue()) { // 3 <  2
+                        if (oldValue != newValue) {
+
+                        }
+
+
+                        if (argumentToPass_Supplies.size() <= (int) supplySlider.getValue()) { // 3 <  2
                             argumentToPass_Supplies.add(editEvent.getTablePosition().getRow(), Integer.parseInt(editEvent.getNewValue()));
 
                             System.out.println("Supply -> getRow() = " + editEvent.getTablePosition().getRow() + "\t\t" + editEvent.getNewValue());
