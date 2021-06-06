@@ -315,7 +315,7 @@ public class MainScreenController implements Initializable {
                 if (supply_row > argumentToPass_CostTable.size()) {  //  3  3
                     argumentToPass_CostTable.add(new ArrayList<>());
                     for (int c = 0; c < argumentToPass_CostTable.get(0).size(); c++) {
-                        argumentToPass_CostTable.get(supply_row - 1).add(1);
+                        argumentToPass_CostTable.get(supply_row - 1).add(89);
                     }
                 } else if (supply_row < argumentToPass_CostTable.size()) {
                     argumentToPass_CostTable.get(argumentToPass_CostTable.size() - 1).clear();
@@ -398,8 +398,8 @@ public class MainScreenController implements Initializable {
             System.out.println(a);
         }*/
 
-
-     new LCM(argumentToPass_Supplies , argumentToPass_demands , argumentToPass_CostTable);
+        LCM leastCostMethod = new LCM(argumentToPass_Supplies, argumentToPass_demands, argumentToPass_CostTable);
+        leastCostMethod.solveLCM();
 
     }
 }

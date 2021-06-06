@@ -29,6 +29,7 @@ public class App extends Application {
         stage.setScene(new Scene(root.load(), 1000, 600));
         stage.setMaxWidth(1000);
         stage.setMaxHeight(600);
+        stage.initStyle(StageStyle.DECORATED);
         stage.show();
 
     }
