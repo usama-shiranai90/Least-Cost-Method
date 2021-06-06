@@ -1,6 +1,7 @@
 package org.lpproblem.Data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LCM {
 
@@ -10,6 +11,10 @@ public class LCM {
     int minColumn;
     int minRow;
     int minValue;
+
+    private List<Integer> rowToSkipList;
+    private List<Integer> columnToSkipList;
+
 
     public LCM(ArrayList<Integer> supply, ArrayList<Integer> demand, ArrayList<ArrayList<Integer>> cost_table) {
         this.supply = new ArrayList<>(supply);
@@ -21,6 +26,8 @@ public class LCM {
         minRow = 0;
         minValue = costTable.get(0).get(0).getCellValue();
 
+        rowToSkipList = new ArrayList<>();
+        columnToSkipList = new ArrayList<>();
     }
 
 
@@ -47,34 +54,129 @@ public class LCM {
         int totalSupply = supply.stream().mapToInt(value -> value).sum();
         int totalDemand = demand.stream().mapToInt(value -> value).sum();
 
+//        System.out.println("totalDemand = " + totalDemand);
+//        System.out.println("totalSupply = " + totalSupply);
+
         if (totalDemand != totalSupply) {
             System.out.println("It is Unbalanced , check again.");
         } else {  // for balanced working.
 
+            while (true) {
 
-            findMinCell();
+                findMinCell();
 
-            // retriving min value from supply or demand.
-            if (supply.get(minRow) > demand.get(minColumn)) {
+                // retrieving min value from supply or demand.
+                if (supply.get(minRow) > demand.get(minColumn)) { // store demand value in min-value.    100 >70
 
-            } else {
+                    int smallC = demand.get(minColumn);
+                    costTable.get(minRow).get(minColumn).setCellMinValue(smallC);
+
+                    demand.set(minColumn, 0);
+                    supply.set(minRow, (supply.get(minRow) - smallC));
+
+
+                } else {
+
+                    int smallC = supply.get(minRow);
+                    costTable.get(minRow).get(minColumn).setCellMinValue(smallC);
+                    supply.set(minRow, 0);
+                    demand.set(minColumn, (demand.get(minColumn) - smallC));
+
+                }
+                System.out.println("demand = " + demand.toString());
+                System.out.println("supply = " + supply.toString());
+
+
+                if (rowToSkipList.size() == supply.size() || columnToSkipList.size() ==  demand.size()){
+                    break;
+                }
 
             }
 
 
         }
+
+
     }
 
     private void findMinCell() {
-        for (int r = 0; r < supply.size(); r++) {
-            for (int c = 0; c < demand.size(); c++) {
-                if (costTable.get(r).get(c).getCellValue() < minValue) {
-                    minValue = costTable.get(r).get(c).getCellValue();
-                    minRow = r;
-                    minColumn = c;
+
+
+        // for supply
+        if (supply.contains(minRow)) {
+
+            int indexToSkip = supply.indexOf(minRow);
+            rowToSkipList.add(indexToSkip);
+
+            for (int i = 0; i < supply.size(); i++) {
+
+                if (!rowToSkipList.isEmpty() && rowToSkipList.contains(i)) {
+                    continue;
+
+                } else {
+
+                    for (int j = 0; j < demand.size(); j++) {
+
+                        if (!columnToSkipList.isEmpty() && columnToSkipList.contains(j)) {
+                            continue;
+                        } else {
+
+                            if (costTable.get(i).get(j).getCellValue() < minValue) {
+                                minValue = costTable.get(i).get(j).getCellValue(); // 1
+                                minRow = i;
+                                minColumn = j;
+                            }
+                        }
+
+                    }
+                }
+
+
+            }
+
+
+        } else if (demand.contains(minColumn)) {  // for demand
+
+            int indexToSkip = demand.indexOf(minColumn);
+            columnToSkipList.add(indexToSkip);
+
+            for (int i = 0; i < supply.size(); i++) {
+
+                if (!rowToSkipList.isEmpty() && rowToSkipList.contains(i)) {
+                    continue;
+                } else {
+
+                    for (int j = 0; j < demand.size(); j++) {
+
+                        if (!columnToSkipList.isEmpty() && columnToSkipList.contains(j)) {
+                            continue;
+                        } else {
+
+                            if (costTable.get(i).get(j).getCellValue() < minValue) {
+                                minValue = costTable.get(i).get(j).getCellValue();
+                                minRow = i;
+                                minColumn = j;
+                            }
+                        }
+                    }
                 }
             }
+
+
+        } else {
+            for (int r = 0; r < supply.size(); r++) {
+                for (int c = 0; c < demand.size(); c++) {
+                    if (costTable.get(r).get(c).getCellValue() < minValue) {
+                        minValue = costTable.get(r).get(c).getCellValue(); // 1
+                        minRow = r; // 0
+                        minColumn = c; // 0
+                    }
+                }
+            }
+
         }
+
+
     }
 
 

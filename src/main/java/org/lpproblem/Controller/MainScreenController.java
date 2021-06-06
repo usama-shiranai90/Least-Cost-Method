@@ -20,6 +20,7 @@ import org.lpproblem.Data.LCM;
 
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainScreenController implements Initializable {
 
@@ -127,8 +128,8 @@ public class MainScreenController implements Initializable {
         setArgumentToPassBoth(argumentToPass_Supplies, sup_list);
         setArgumentToPassBoth(argumentToPass_demands, demand_list);
 
-        configureSlider(supplySlider, supplyLabel, observableListSupplies, INIT_VALUE);
-        configureSlider(demandSlider, demandLabel, observableListDemands, INIT_VALUE + 1);
+        configureSlider(supplySlider, supplyLabel, observableListSupplies);
+        configureSlider(demandSlider, demandLabel, observableListDemands);
 
 
 //        setting cost table
@@ -166,7 +167,7 @@ public class MainScreenController implements Initializable {
 
     }
 
-    private void configureSlider(Slider sliderForBoth, Label label, ObservableList<Cell> observableList, int INIT_VALUE) {
+    private void configureSlider(Slider sliderForBoth, Label label, ObservableList<Cell> observableList) {
 /*        sliderForBoth.setMin(1);
         sliderForBoth.setMax(10);
         sliderForBoth.setValue(INIT_VALUE);
@@ -209,7 +210,8 @@ public class MainScreenController implements Initializable {
             }
         }
         costTableView.refresh();
-//        System.out.println("argumentToPass_CostTable = " + argumentToPass_CostTable.get(2).size());
+
+//        System.out.println("supplySlider =  " + supplySlider.getValue() + "\t\tdemandSlider =" + demandSlider.getValue() + "\t\t");
         updateArgumentToPass_CostTable((int) supplySlider.getValue(), (int) demandSlider.getValue(), "editRow");
     }
 
@@ -228,24 +230,31 @@ public class MainScreenController implements Initializable {
         column.setOnEditCommit(
                 (EventHandler<TableColumn.CellEditEvent<Cell, String>>) editEvent -> {
                     (editEvent.getTableView().getItems().get(editEvent.getTablePosition().getRow())).setValue(viewHelp(editEvent.getNewValue()));
+                    
+                    System.out.println("getRow() value = " + editEvent.getTableView().getItems().get(editEvent.getTablePosition().getRow()).getValue());
 
                     if (tableType.equalsIgnoreCase("supply")) {
 
                         if (argumentToPass_Supplies.size() < (int) supplySlider.getValue()) { // 3 <  2
                             argumentToPass_Supplies.add(editEvent.getTablePosition().getRow(), Integer.parseInt(editEvent.getNewValue()));
+
+                            System.out.println("Supply -> getRow() = " + editEvent.getTablePosition().getRow() + "\t\t" + editEvent.getNewValue());
+
                         } else {
                             argumentToPass_Supplies.remove(argumentToPass_Supplies.size() - 1);
                         }
-                        System.out.println("argumentToPass_Supplies = " + argumentToPass_Supplies.toString());
+//                        System.out.println("argumentToPass_Supplies = " + argumentToPass_Supplies.toString());
                     } else if (tableType.equalsIgnoreCase("demand")) {
 
                         if (argumentToPass_demands.size() < (int) demandSlider.getValue()) { // 3 <  2
                             argumentToPass_demands.add(editEvent.getTablePosition().getRow(), Integer.parseInt(editEvent.getNewValue()));
+                            System.out.println("Demand ->getRow() = " + editEvent.getTablePosition().getRow() + "\t\t" + editEvent.getNewValue());
+
                         } else {
                             argumentToPass_demands.remove(argumentToPass_demands.size() - 1);
                         }
 
-                        System.out.println("argumentToPass_demands = " + argumentToPass_demands.toString());
+//                        System.out.println("argumentToPass_demands = " + argumentToPass_demands.toString());
                     }
 /*                   System.out.println("editEvent.getTablePosition().getRow() = " + editEvent.getTablePosition().getRow() + "\t\t " + editEvent.getNewValue());
                     System.out.println("argumentToPass_Supplies = " + argumentToPass_Supplies.toString());
@@ -272,8 +281,10 @@ public class MainScreenController implements Initializable {
             TableColumn<ElementCollection, String> column = new TableColumn<>("D" + (i + 1));
 
             final int increment = i;
+            column.setCellValueFactory(elementStringCellDataFeatures -> {
+                return new ReadOnlyStringWrapper(elementStringCellDataFeatures.getValue().getByIndex(increment) + ""); //
+            });
 
-            column.setCellValueFactory(elementStringCellDataFeatures -> new ReadOnlyStringWrapper(elementStringCellDataFeatures.getValue().getByIndex(increment) + ""));
             column.setCellFactory(TextFieldTableCell.forTableColumn());
 
             /*            column.setOnEditCommit(
@@ -282,11 +293,10 @@ public class MainScreenController implements Initializable {
                                 column.setOnEditCommit();*/
             column.setOnEditCommit(cellEditEvent -> {
                 cellEditEvent.getRowValue().setByIndex(columnIndex, Integer.parseInt(cellEditEvent.getNewValue()));
-/*                System.out.println("cellEditEvent.getTablePosition().getRow() = " + cellEditEvent.getTablePosition().getRow());
-                System.out.println("cellEditEvent.getTablePosition().getColumn() = " + cellEditEvent.getTablePosition().getColumn());
-                System.out.println("cellEditEvent.getNewValue() = " + cellEditEvent.getNewValue());*/
                 argumentToPass_CostTable.get(cellEditEvent.getTablePosition().getRow())
                         .set(cellEditEvent.getTablePosition().getColumn(), Integer.parseInt(cellEditEvent.getNewValue()));
+
+                System.out.println("cellEditEvent.getNewValue() = " + cellEditEvent.getNewValue());
 
             });
             tableColumnList.add(column);
@@ -310,12 +320,12 @@ public class MainScreenController implements Initializable {
             }
         }*/
 
-        if (checkBi.equalsIgnoreCase("editrow")) {  // row add ya kam .
+        if (checkBi.equalsIgnoreCase("editRow")) {  // row add ya kam .
             for (int i = 0; i < supply_row; i++) {
                 if (supply_row > argumentToPass_CostTable.size()) {  //  3  3
                     argumentToPass_CostTable.add(new ArrayList<>());
                     for (int c = 0; c < argumentToPass_CostTable.get(0).size(); c++) {
-                        argumentToPass_CostTable.get(supply_row - 1).add(89);
+                        argumentToPass_CostTable.get(supply_row - 1).add(1);
                     }
                 } else if (supply_row < argumentToPass_CostTable.size()) {
                     argumentToPass_CostTable.get(argumentToPass_CostTable.size() - 1).clear();
@@ -398,8 +408,11 @@ public class MainScreenController implements Initializable {
             System.out.println(a);
         }*/
 
-        LCM leastCostMethod = new LCM(argumentToPass_Supplies, argumentToPass_demands, argumentToPass_CostTable);
-        leastCostMethod.solveLCM();
+        System.out.println("argumentToPass_Supplies = " + argumentToPass_Supplies.toString());
+        System.out.println("argumentToPass_demands.toString() = " + argumentToPass_demands.toString());
+
+//        LCM leastCostMethod = new LCM(argumentToPass_Supplies, argumentToPass_demands, argumentToPass_CostTable);
+//        leastCostMethod.solveLCM();
 
     }
 }
