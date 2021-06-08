@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ElementCollection {
 
-    private final List<Cell> cellsData = new ArrayList<>();
+    private List<Cell> cellsData = new ArrayList<>();
 
     public int getSize() {
         return cellsData.size();
@@ -39,4 +39,11 @@ public class ElementCollection {
     }
 
 
+    public void setCellsData(ArrayList<Cell> c){
+            cellsData =  new ArrayList<>(c);
+    }
+
+    public List<Cell> getCellsData() {
+        return cellsData;
+    }
 }

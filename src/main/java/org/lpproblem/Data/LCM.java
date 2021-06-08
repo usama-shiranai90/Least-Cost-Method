@@ -1,7 +1,10 @@
 package org.lpproblem.Data;
 
+import com.sun.javafx.print.Units;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class LCM {
 
@@ -14,6 +17,7 @@ public class LCM {
 
     private List<Integer> rowToSkipList;
     private List<Integer> columnToSkipList;
+    private String checkSkip;
 
 
     public LCM(ArrayList<Integer> supply, ArrayList<Integer> demand, ArrayList<ArrayList<Integer>> cost_table) {
@@ -28,6 +32,7 @@ public class LCM {
 
         rowToSkipList = new ArrayList<>();
         columnToSkipList = new ArrayList<>();
+        checkSkip = null;
     }
 
 
@@ -54,9 +59,6 @@ public class LCM {
         int totalSupply = supply.stream().mapToInt(value -> value).sum();
         int totalDemand = demand.stream().mapToInt(value -> value).sum();
 
-//        System.out.println("totalDemand = " + totalDemand);
-//        System.out.println("totalSupply = " + totalSupply);
-
         if (totalDemand != totalSupply) {
             System.out.println("It is Unbalanced , check again.");
         } else {  // for balanced working.
@@ -73,7 +75,7 @@ public class LCM {
 
                     demand.set(minColumn, 0);
                     supply.set(minRow, (supply.get(minRow) - smallC));
-
+                    checkSkip = "demand";
 
                 } else {
 
@@ -81,36 +83,49 @@ public class LCM {
                     costTable.get(minRow).get(minColumn).setCellMinValue(smallC);
                     supply.set(minRow, 0);
                     demand.set(minColumn, (demand.get(minColumn) - smallC));
-
+                    checkSkip = "sup";  // skip row.
                 }
-                System.out.println("demand = " + demand.toString());
-                System.out.println("supply = " + supply.toString());
+                System.out.println("demand = " + demand.toString() + "\t\t" + "supply = " + supply.toString() +"\t\tTo Enter = "+checkSkip+ "\n");
 
-
-                if (rowToSkipList.size() == supply.size() || columnToSkipList.size() ==  demand.size()){
+                if (rowToSkipList.size() == supply.size() || columnToSkipList.size() == demand.size()) {
                     break;
                 }
 
             }
 
+            for (ArrayList<LCMCellSet> row : costTable) {
+
+                for (LCMCellSet column : row) {
+                    if (column.getCellMinValue() != -1) {
+                        System.out.print(column.getCellValue() + " * " + column.getCellMinValue() + "+");
+                    }
+                }
+
+            }
 
         }
 
 
     }
 
+    /**
+     * demand 0 then column skip and if supply 0 row skip.
+     */
     private void findMinCell() {
-
-
+        System.out.println("Demand.toString() = " + demand.toString() + "\t\t" + "supply.toString() = " + supply.toString());
         // for supply
-        if (supply.contains(minRow)) {
 
-            int indexToSkip = supply.indexOf(minRow);
-            rowToSkipList.add(indexToSkip);
+        if ( (checkSkip != null) && checkSkip.equals("sup")  /*supply.contains(minRow) && supply.get(minRow) == 0 */) {
+//            int indexToSkip = supply.indexOf(minRow);
+//            System.out.println("indexToSkip = " + indexToSkip);
+//            System.out.println("indexToSkip Of Supply = " + indexToSkip);
+
+            rowToSkipList.add(minRow);
 
             for (int i = 0; i < supply.size(); i++) {
 
                 if (!rowToSkipList.isEmpty() && rowToSkipList.contains(i)) {
+                    System.out.print("Found!");
                     continue;
 
                 } else {
@@ -135,18 +150,20 @@ public class LCM {
             }
 
 
-        } else if (demand.contains(minColumn)) {  // for demand
+        } else if ( (checkSkip != null) && checkSkip.equals("demand") /*demand.contains(minColumn) && demand.get(minColumn) == 0 */ ) {  // for demand
 
-            int indexToSkip = demand.indexOf(minColumn);
-            columnToSkipList.add(indexToSkip);
+//            int indexToSkip = demand.indexOf(minColumn);
+//            System.out.println("indexToSkip Demand = " + indexToSkip);
+            columnToSkipList.add(minColumn);
 
-            for (int i = 0; i < supply.size(); i++) {
+
+            for (int i = 0; i < supply.size(); i++) { // 3
 
                 if (!rowToSkipList.isEmpty() && rowToSkipList.contains(i)) {
                     continue;
                 } else {
-
-                    for (int j = 0; j < demand.size(); j++) {
+                    System.out.println("let me in");
+                    for (int j = 0; j < demand.size(); j++) { // 4
 
                         if (!columnToSkipList.isEmpty() && columnToSkipList.contains(j)) {
                             continue;
@@ -173,7 +190,12 @@ public class LCM {
                     }
                 }
             }
-
+            System.out.println("minRow = " + minRow + "\t\tminColumn = " + minColumn + "\t\tValue = " + minValue);
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
 

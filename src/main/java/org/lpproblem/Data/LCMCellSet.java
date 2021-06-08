@@ -11,6 +11,7 @@ public class LCMCellSet {
 
     public LCMCellSet(int cellValue) {
         this.cellValue = cellValue;
+        cellMinValue = -1;
     }
 
     public LCMCellSet(int cellValue, int cellMinValue) {
