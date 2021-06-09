@@ -1,7 +1,5 @@
 package org.lpproblem.Data;
 
-import com.sun.javafx.print.Units;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -18,7 +16,8 @@ public class LCM {
     private List<Integer> rowToSkipList;
     private List<Integer> columnToSkipList;
     private String checkSkip;
-
+    private int optimalSolution;
+    private StringBuilder equationString;
 
     public LCM(ArrayList<Integer> supply, ArrayList<Integer> demand, ArrayList<ArrayList<Integer>> cost_table) {
         this.supply = new ArrayList<>(supply);
@@ -29,10 +28,12 @@ public class LCM {
         minColumn = 0;
         minRow = 0;
         minValue = costTable.get(0).get(0).getCellValue();
+        optimalSolution = 0;
 
         rowToSkipList = new ArrayList<>();
         columnToSkipList = new ArrayList<>();
         checkSkip = null;
+        equationString = new StringBuilder();
     }
 
 
@@ -46,13 +47,8 @@ public class LCM {
             }
         }
 
-        for (ArrayList<LCMCellSet> list : costTable) {
+        printCostTable();
 
-            for (LCMCellSet cellSet : list) {
-                System.out.print(cellSet.getCellValue() + "\t");
-            }
-            System.out.println();
-        }
     }
 
     public void solveLCM() {
@@ -85,42 +81,64 @@ public class LCM {
                     demand.set(minColumn, (demand.get(minColumn) - smallC));
                     checkSkip = "sup";  // skip row.
                 }
-                System.out.println("demand = " + demand.toString() + "\t\t" + "supply = " + supply.toString() +"\t\tTo Enter = "+checkSkip+ "\n");
+                System.out.println("demand = " + demand.toString() + "\t\t" + "supply = " + supply.toString() + "\t\tTo Enter = " + checkSkip + "\n");
 
                 if (rowToSkipList.size() == supply.size() || columnToSkipList.size() == demand.size()) {
+                    System.out.println("about to break");
+                    printCostTable();
                     break;
                 }
 
             }
 
+
+            int count = 0;
             for (ArrayList<LCMCellSet> row : costTable) {
 
                 for (LCMCellSet column : row) {
                     if (column.getCellMinValue() != -1) {
-                        System.out.print(column.getCellValue() + " * " + column.getCellMinValue() + "+");
+                        optimalSolution += column.getCellMinValue() * column.getCellValue();
+                        equationString.append(column.getCellValue()).append("*").append(column.getCellMinValue()).append(" + ");
+                        count = equationString.toString().length();
                     }
                 }
+            }
 
+            System.out.println("Final Table ");
+            printCostTable();
+
+            equationString.deleteCharAt(count - 2);
+            System.out.println("resultForLabel = " + equationString.toString());
+            System.out.println("optimalSolution = " + optimalSolution);
+
+
+            System.out.println("Optimaziled Table");
+            for (ArrayList<LCMCellSet> list : costTable) {
+                for (LCMCellSet cellSet : list) {
+                    System.out.print(cellSet.getCellValue() + " -> " + cellSet.getCellMinValue() + "\t");
+                }
+                System.out.println();
             }
 
         }
-
 
     }
 
     /**
      * demand 0 then column skip and if supply 0 row skip.
      */
+
     private void findMinCell() {
         System.out.println("Demand.toString() = " + demand.toString() + "\t\t" + "supply.toString() = " + supply.toString());
-        // for supply
 
-        if ( (checkSkip != null) && checkSkip.equals("sup")  /*supply.contains(minRow) && supply.get(minRow) == 0 */) {
-//            int indexToSkip = supply.indexOf(minRow);
-//            System.out.println("indexToSkip = " + indexToSkip);
-//            System.out.println("indexToSkip Of Supply = " + indexToSkip);
+
+        if ((checkSkip != null) && checkSkip.equals("sup")  /*supply.contains(minRow) && supply.get(minRow) == 0 */) {
 
             rowToSkipList.add(minRow);
+            System.out.println("rowToSkipList.toString() = " + rowToSkipList.toString());
+            minValue = 1000;
+            minColumn = 0;
+            minRow = 0;
 
             for (int i = 0; i < supply.size(); i++) {
 
@@ -150,22 +168,24 @@ public class LCM {
             }
 
 
-        } else if ( (checkSkip != null) && checkSkip.equals("demand") /*demand.contains(minColumn) && demand.get(minColumn) == 0 */ ) {  // for demand
+        } else if ((checkSkip != null) && checkSkip.equals("demand") /*demand.contains(minColumn) && demand.get(minColumn) == 0 */) {  // for demand
 
-//            int indexToSkip = demand.indexOf(minColumn);
-//            System.out.println("indexToSkip Demand = " + indexToSkip);
             columnToSkipList.add(minColumn);
-
+            System.out.println("columnToSkipList.toString() = " + columnToSkipList.toString());
+            minValue = 1000;
+            minColumn = -1;
+            minRow = -1;
 
             for (int i = 0; i < supply.size(); i++) { // 3
 
                 if (!rowToSkipList.isEmpty() && rowToSkipList.contains(i)) {
+                    System.out.println("i am skipping row = " + i);
                     continue;
                 } else {
-                    System.out.println("let me in");
                     for (int j = 0; j < demand.size(); j++) { // 4
 
                         if (!columnToSkipList.isEmpty() && columnToSkipList.contains(j)) {
+                            System.out.println("i am skipping column = " + j);
                             continue;
                         } else {
 
@@ -175,6 +195,7 @@ public class LCM {
                                 minColumn = j;
                             }
                         }
+
                     }
                 }
             }
@@ -202,4 +223,28 @@ public class LCM {
     }
 
 
+    public void printCostTable() {
+        for (ArrayList<LCMCellSet> list : costTable) {
+            for (LCMCellSet cellSet : list) {
+                System.out.print(cellSet.getCellValue() + "\t");
+            }
+            System.out.println();
+        }
+    }
+
+    public int getOptimalSolution() {
+        return optimalSolution;
+    }
+
+    public StringBuilder getEquationString() {
+        return equationString;
+    }
+
+    public ArrayList<ArrayList<LCMCellSet>> getCostTable() {
+        return costTable;
+    }
+
+    public void setCostTable(ArrayList<ArrayList<LCMCellSet>> costTable) {
+        this.costTable = costTable;
+    }
 }

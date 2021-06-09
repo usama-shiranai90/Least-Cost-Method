@@ -13,14 +13,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.MouseEvent;
 import org.lpproblem.Data.Cell;
 import org.lpproblem.Data.ElementCollection;
 import org.lpproblem.Data.LCM;
 
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainScreenController implements Initializable {
 
@@ -32,7 +30,6 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private TableView<ElementCollection> costTableView = new TableView<>();
-
 
     @FXML
     private JFXSlider supplySlider = new JFXSlider();
@@ -52,7 +49,16 @@ public class MainScreenController implements Initializable {
     @FXML
     private TableColumn demandColumn;
 
+    @FXML
+    private Label optimalLabel;
+
+    @FXML
+    private Label equalLabel;
+
     private static final int INIT_VALUE = 3;
+    private int columnIndex;
+    private int selectedRow;
+    private int selectedColumn;
 
     private List<Cell> supplyList;
     private List<Cell> demandList;
@@ -61,14 +67,11 @@ public class MainScreenController implements Initializable {
     private ObservableList<Cell> observableListDemands;
     private ObservableList<ElementCollection> costsObservableList;
 
-    private int columnIndex;
-
     private ArrayList<Integer> argumentToPass_Supplies = null;
     private ArrayList<Integer> argumentToPass_demands = null;
     private ArrayList<ArrayList<Integer>> argumentToPass_CostTable = null;
 
-    private int selectedRow;
-    private int selectedColumn;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -105,9 +108,7 @@ public class MainScreenController implements Initializable {
               /*  new Cell(100),
                 new Cell(60),
                 new Cell(120)*/
-                new Cell(7),
-                new Cell(9), new Cell(18)
-
+                new Cell(7), new Cell(9), new Cell(18)
         );
 
         // for demand
@@ -117,10 +118,7 @@ public class MainScreenController implements Initializable {
                 new Cell(100),
                 new Cell(60)
         */
-                new Cell(5),
-                new Cell(8),
-                new Cell(7),
-                new Cell(14)
+                new Cell(5), new Cell(8), new Cell(7), new Cell(14)
         );
 
         supplyList.addAll(sup_list);
@@ -129,28 +127,17 @@ public class MainScreenController implements Initializable {
         observableListSupplies = FXCollections.observableArrayList(supplyList);
         observableListDemands = FXCollections.observableArrayList(demandList);
 
-
         List<Cell> c1 = Arrays.asList(
-                new Cell(19),
-                new Cell(70),
-                new Cell(40)
-        );
-        List<Cell> c2 = Arrays.asList(
-                new Cell(30),
-                new Cell(30),
-                new Cell(8)
+                new Cell(19), new Cell(70), new Cell(40));
 
-        );
+        List<Cell> c2 = Arrays.asList(
+                new Cell(30), new Cell(30), new Cell(8));
+
         List<Cell> c3 = Arrays.asList(
-                new Cell(50),
-                new Cell(40),
-                new Cell(70)
-        );
+                new Cell(50), new Cell(40), new Cell(70));
+
         List<Cell> c4 = Arrays.asList(
-                new Cell(10),
-                new Cell(60),
-                new Cell(20)
-        );
+                new Cell(10), new Cell(60), new Cell(20));
 
         List<List<Cell>> demo = new ArrayList<>();
         demo.add(c1);
@@ -346,10 +333,9 @@ public class MainScreenController implements Initializable {
 
             column.setCellFactory(TextFieldTableCell.forTableColumn());
 
-            /*            column.setOnEditCommit(
-                                    t -> t.getTableView().getItems().get(
-                                            t.getTablePosition().getRow()).setByIndex(columnIndex, Integer.parseInt(t.getNewValue())));
-                                column.setOnEditCommit();*/
+                /*   column.setOnEditCommit(    t -> t.getTableView().getItems().get(t.getTablePosition().getRow()).
+                     setByIndex(columnIndex, Integer.parseInt(t.getNewValue())));
+                     column.setOnEditCommit(); */
             column.setOnEditCommit(cellEditEvent -> {
                 cellEditEvent.getRowValue().setByIndex(columnIndex, Integer.parseInt(cellEditEvent.getNewValue()));
                 argumentToPass_CostTable.get(cellEditEvent.getTablePosition().getRow())
@@ -369,14 +355,6 @@ public class MainScreenController implements Initializable {
     }
 
     private void updateArgumentToPass_CostTable(int supply_row, int demand_column, String checkBi) {
-/*        argumentToPass_CostTable = new ArrayList<>();
-
-        for (int r = 0; r < supply_row; r++) {
-            argumentToPass_CostTable.add(r, new ArrayList<>());
-            for (int c = 0; c < demand_column; c++) {
-                argumentToPass_CostTable.get(r).add(c, 0);
-            }
-        }*/
 
         if (checkBi.equalsIgnoreCase("editRow")) {  // row add ya kam .
             for (int i = 0; i < supply_row; i++) {
@@ -402,7 +380,6 @@ public class MainScreenController implements Initializable {
                 }
             }
         }
-//        System.out.println("supply_row = " + supply_row + "\t\t" + argumentToPass_CostTable.size());
 
     }
 
@@ -457,20 +434,16 @@ public class MainScreenController implements Initializable {
 
 
     @FXML
-    void performCalculation(MouseEvent event) {
-/*        System.out.println("argumentToPass_Supplies = " + argumentToPass_Supplies.toString());
-        System.out.println("argumentToPass_demands = " + argumentToPass_demands.toString());
-
-        System.out.println("Testing Cost Table :");
-        for (ArrayList<Integer> a : argumentToPass_CostTable) {
-            System.out.println(a);
-        }*/
-
-        System.out.println("argumentToPass_Supplies = " + argumentToPass_Supplies.toString());
-        System.out.println("argumentToPass_demands.toString() = " + argumentToPass_demands.toString());
+    void performCalculation() {
 
         LCM leastCostMethod = new LCM(argumentToPass_Supplies, argumentToPass_demands, argumentToPass_CostTable);
         leastCostMethod.solveLCM();
 
+        equalLabel.setText(leastCostMethod.getEquationString().toString());
+        optimalLabel.setText(String.valueOf(leastCostMethod.getOptimalSolution()));
+
     }
+
+
+
 }
