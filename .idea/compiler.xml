@@ -9,5 +9,8 @@
         <module name="Least-Cost-Method" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Least-Cost-Method" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

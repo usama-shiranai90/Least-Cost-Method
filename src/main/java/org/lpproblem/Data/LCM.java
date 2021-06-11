@@ -63,32 +63,45 @@ public class LCM {
 
                 findMinCell();
 
-                // retrieving min value from supply or demand.
-                if (supply.get(minRow) > demand.get(minColumn)) { // store demand value in min-value.    100 >70
+                if (minRow != -1  && minColumn != -1){
+                    // retrieving min value from supply or demand.
+                    if (supply.get(minRow) > demand.get(minColumn)) { // store demand value in min-value.    100 >70
 
-                    int smallC = demand.get(minColumn);
-                    costTable.get(minRow).get(minColumn).setCellMinValue(smallC);
+                        int smallC = demand.get(minColumn);
 
-                    demand.set(minColumn, 0);
-                    supply.set(minRow, (supply.get(minRow) - smallC));
-                    checkSkip = "demand";
+                        costTable.get(minRow).get(minColumn).setCellMinValue(smallC);
+                        System.out.println("At Demand -> demand minRow = " + smallC +"\t\t"+ supply.get(minRow)  +"\t\t" + costTable.get(minRow).get(minColumn).getCellValue()+" -> "+ costTable.get(minRow).get(minColumn).getCellMinValue() );
+                        demand.set(minColumn, 0);
+                        supply.set(minRow, (supply.get(minRow) - smallC));
+                        checkSkip = "demand";
 
-                } else {
+                    }
+                    else {
 
-                    int smallC = supply.get(minRow);
-                    costTable.get(minRow).get(minColumn).setCellMinValue(smallC);
-                    supply.set(minRow, 0);
-                    demand.set(minColumn, (demand.get(minColumn) - smallC));
-                    checkSkip = "sup";  // skip row.
+                        int smallC = supply.get(minRow);
+                        costTable.get(minRow).get(minColumn).setCellMinValue(smallC);
+                        System.out.println("At Supply : demand min-value = " + smallC +"\t\t"+ demand.get(minColumn)  +"\t\t" + costTable.get(minRow).get(minColumn).getCellValue()+" -> "+ costTable.get(minRow).get(minColumn).getCellMinValue() );
+
+                        supply.set(minRow, 0);
+                        demand.set(minColumn, (demand.get(minColumn) - smallC));
+                        checkSkip = "sup";  // skip row.
+                    }
+                    System.out.println("demand = " + demand.toString() + "\t\t" + "supply = " + supply.toString() + "\t\tTo Enter = " + checkSkip );
+                    for (ArrayList<LCMCellSet> list : costTable) {
+                        for (LCMCellSet cellSet : list) {
+                            System.out.print(cellSet.getCellValue() + " -> " + cellSet.getCellMinValue() + "\t");
+                        }
+                        System.out.println();
+                    }
+                    System.out.println("\n\n");
+                    if (rowToSkipList.size() == supply.size() || columnToSkipList.size() == demand.size()) {
+                        System.out.println("about to break");
+                        printCostTable();
+                        break;
+                    }
                 }
-                System.out.println("demand = " + demand.toString() + "\t\t" + "supply = " + supply.toString() + "\t\tTo Enter = " + checkSkip + "\n");
-
-                if (rowToSkipList.size() == supply.size() || columnToSkipList.size() == demand.size()) {
-                    System.out.println("about to break");
-                    printCostTable();
+                else
                     break;
-                }
-
             }
 
 
@@ -135,15 +148,15 @@ public class LCM {
         if ((checkSkip != null) && checkSkip.equals("sup")  /*supply.contains(minRow) && supply.get(minRow) == 0 */) {
 
             rowToSkipList.add(minRow);
-            System.out.println("rowToSkipList.toString() = " + rowToSkipList.toString());
+            System.out.println("At Sup -> rowToSkipLis = " + rowToSkipList.toString() +"\tColumnskip = " + columnToSkipList.toString());
             minValue = 1000;
-            minColumn = 0;
-            minRow = 0;
+            minColumn = -1;
+            minRow = -1;
 
             for (int i = 0; i < supply.size(); i++) {
 
                 if (!rowToSkipList.isEmpty() && rowToSkipList.contains(i)) {
-                    System.out.print("Found!");
+//                    System.out.print("Found!");
                     continue;
 
                 } else {
@@ -158,6 +171,9 @@ public class LCM {
                                 minValue = costTable.get(i).get(j).getCellValue(); // 1
                                 minRow = i;
                                 minColumn = j;
+                                System.out.println("minValue = " + minValue);
+                                System.out.println("minRow = " + minRow);
+                                System.out.println("minColumn = " + minColumn);
                             }
                         }
 
@@ -171,7 +187,9 @@ public class LCM {
         } else if ((checkSkip != null) && checkSkip.equals("demand") /*demand.contains(minColumn) && demand.get(minColumn) == 0 */) {  // for demand
 
             columnToSkipList.add(minColumn);
-            System.out.println("columnToSkipList.toString() = " + columnToSkipList.toString());
+            System.out.println("At demand -> rowToSkipLis = " + rowToSkipList.toString() +"\tColumnskip = " + columnToSkipList.toString() +"\t min column =" + minColumn
+                    +"\t min row =" + minRow);
+
             minValue = 1000;
             minColumn = -1;
             minRow = -1;
@@ -179,13 +197,13 @@ public class LCM {
             for (int i = 0; i < supply.size(); i++) { // 3
 
                 if (!rowToSkipList.isEmpty() && rowToSkipList.contains(i)) {
-                    System.out.println("i am skipping row = " + i);
+//                    System.out.println("i am skipping row = " + i);
                     continue;
                 } else {
                     for (int j = 0; j < demand.size(); j++) { // 4
 
                         if (!columnToSkipList.isEmpty() && columnToSkipList.contains(j)) {
-                            System.out.println("i am skipping column = " + j);
+//                            System.out.println("i am skipping column = " + j);
                             continue;
                         } else {
 
